@@ -1,0 +1,157 @@
+<?php
+/*
+** Copyright (C) 2021-2026 initMAX s.r.o.
+**
+** This program is free software: you can redistribute it and/or modify it under the terms of
+** the GNU Affero General Public License as published by the Free Software Foundation, version 3.
+**
+** This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+** without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+** See the GNU Affero General Public License for more details.
+**
+** You should have received a copy of the GNU Affero General Public License along with this program.
+** If not, see <https://www.gnu.org/licenses/>.
+**/
+
+
+namespace Modules\EnhancedProblems\Actions;
+
+use API;
+use CRoleHelper;
+use CProfile;
+use CControllerPopupAcknowledgeEdit;
+use CControllerResponseData;
+
+class WidgetAcknowledgePopup extends CControllerPopupAcknowledgeEdit {
+
+    protected function checkPermissions() {
+        // This action does not require special permissions
+        return true;
+    }
+
+    public function doAction() {
+        $events = API::Event()->get([
+            'output' => ['eventid', 'name', 'objectid', 'acknowledged', 'value', 'r_eventid'],
+            'selectAcknowledges' => ['userid', 'clock', 'message', 'action', 'old_severity', 'new_severity',
+                'suppress_until'
+            ],
+            'eventids' => $this->getInput('eventids'),
+            'selectTags' => 'extend',
+            'selectSuppressionData' => ['maintenanceid'],
+            'source' => EVENT_SOURCE_TRIGGERS,
+            'object' => EVENT_OBJECT_TRIGGER
+        ]);
+        $data = [
+            'title' => _('Update problem'),
+            'eventids' => $this->getInput('eventids'),
+            'related_problems_count' => 0,
+            'problem_can_be_closed' => false,
+            'problem_can_be_suppressed' => false,
+            'problem_can_be_unsuppressed' => false,
+            'problem_severity_can_be_changed' => false,
+            'allowed_acknowledge' => $this->checkAccess(CRoleHelper::ACTIONS_ACKNOWLEDGE_PROBLEMS),
+            'allowed_close' => $this->checkAccess(CRoleHelper::ACTIONS_CLOSE_PROBLEMS),
+            'allowed_change_severity' => $this->checkAccess(CRoleHelper::ACTIONS_CHANGE_SEVERITY),
+            'allowed_add_comments' => $this->checkAccess(CRoleHelper::ACTIONS_ADD_PROBLEM_COMMENTS),
+            'allowed_suppress' => $this->checkAccess(CRoleHelper::ACTIONS_SUPPRESS_PROBLEMS),
+            'suppress_until_problem' => CProfile::get('web.problem_suppress_action_time_until', 'now+1d'),
+            'errors' => hasErrorMessages() ? getMessages() : null,
+            'user' => ['debug_mode' => $this->getDebugMode()]
+        ];
+
+        if (count($events) == 1) {
+            $event = reset($events);
+            $tags = array_column($event['tags'], 'value', 'tag');
+            $history = getEventUpdates($event);
+            $data += [
+                'problem_name' => $event['name'],
+                'history' => $history['data'],
+                'users' => API::User()->get([
+                    'output' => ['username', 'name', 'surname'],
+                    'userids' => array_keys($history['userids']),
+                    'preservekeys' => true
+                ]),
+                'tag_alarm_number_value' => $tags['AlarmNumber'] ?? 'n/a',
+                'tag_suppl_info_value' => $tags['SupplInfo'] ?? 'n/a',
+            ];
+        }
+        else {
+            $data['problem_name'] = _s('%1$d problems selected.', count($events));
+        }
+
+        $triggerids = array_column($events, 'objectid', 'objectid');
+
+        $editable_triggers = API::Trigger()->get([
+            'output' => ['manual_close'],
+            'triggerids' => $triggerids,
+            'editable' => true,
+            'preservekeys' => true
+        ]);
+
+        $ack_count = 0;
+
+        // Loop through events to figure out what operations should be allowed.
+        foreach ($events as $event) {
+            $can_be_closed = true;
+            $can_be_suppressed = true;
+            $can_be_unsuppressed = false;
+
+            // Only manually suppressed problems can be unsuppressed.
+            if ($this->checkAccess(CRoleHelper::ACTIONS_SUPPRESS_PROBLEMS)) {
+                foreach ($event['suppression_data'] as $suppression) {
+                    if ($suppression['maintenanceid'] == 0) {
+                        $can_be_unsuppressed = true;
+                    }
+                }
+            }
+
+            // Problems already resolved are not allowed to be closed, suppressed or unsuppressed.
+            if ($event['r_eventid'] != 0 || $event['value'] == TRIGGER_VALUE_FALSE) {
+                $can_be_closed = false;
+                $can_be_suppressed = false;
+                $can_be_unsuppressed = false;
+                $data['related_problems_count']++; // Count selected but closed events.
+            }
+            // Not allowed to close events generated by non-writable and non-closable triggers.
+            elseif (!array_key_exists($event['objectid'], $editable_triggers)
+                    || $editable_triggers[$event['objectid']]['manual_close'] == ZBX_TRIGGER_MANUAL_CLOSE_NOT_ALLOWED) {
+                $can_be_closed = false;
+            }
+            // Look if problem is not currently in closing state due acknowledge actions.
+            elseif (hasEventCloseAction($event['acknowledges'])) {
+                $can_be_closed = false;
+            }
+
+            // If at least one event can be closed, enable 'Close problem' checkbox.
+            if ($can_be_closed) {
+                $data['problem_can_be_closed'] = true;
+            }
+
+            // If at least one event can be suppressed, enable 'Suppress' checkbox.
+            if ($can_be_suppressed) {
+                $data['problem_can_be_suppressed'] = true;
+            }
+
+            // If at least one event can be unsuppressed, enable 'Unsuppress' checkbox.
+            if ($can_be_unsuppressed) {
+                $data['problem_can_be_unsuppressed'] = true;
+            }
+
+            $ack_count += ($event['acknowledged'] == EVENT_ACKNOWLEDGED) ? 1 : 0;
+        }
+
+        $data['has_ack_events'] = ($ack_count > 0);
+        $data['has_unack_events'] = ($ack_count != count($events));
+
+        // Severity can be changed only for editable triggers.
+        $data['problem_severity_can_be_changed'] = (bool) $editable_triggers;
+
+        // Add number of selected and related problem events to count of selected resolved events.
+        $data['related_problems_count'] += API::Problem()->get([
+            'countOutput' => true,
+            'objectids' => $triggerids
+        ]);
+
+        $this->setResponse(new CControllerResponseData($data));
+    }
+}

@@ -1,0 +1,344 @@
+/*
+** Copyright (C) 2021-2026 initMAX s.r.o.
+**
+** This program is free software: you can redistribute it and/or modify it under the terms of
+** the GNU Affero General Public License as published by the Free Software Foundation, version 3.
+**
+** This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+** without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+** See the GNU Affero General Public License for more details.
+**
+** You should have received a copy of the GNU Affero General Public License along with this program.
+** If not, see <https://www.gnu.org/licenses/>.
+**/
+
+
+.enhanced-problems-widget-title {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+
+    padding: 1rem;
+
+    a {
+        color: unset;
+    }
+}
+
+.enhanced-problems-widget-summary-row {
+    display: grid;
+    grid-template-columns: 1fr min-content min-content;
+    grid-gap: 0.5rem;
+
+    padding: 6px 10px;
+
+    > .severities-count {
+        --radius: 4px;
+
+        display: flex;
+
+        background-color: white;
+
+        border-radius: var(--radius);
+
+        > .severities-count__item {
+            display:flex;
+            min-width: 1rem;
+            justify-content: center;
+
+            color: black;
+
+            white-space: nowrap;
+
+            &:first-child {
+                border-top-left-radius: var(--radius);
+                border-bottom-left-radius: var(--radius);
+            }
+
+            &:last-child {
+                border-top-right-radius: var(--radius);
+                border-bottom-right-radius: var(--radius);
+            }
+        }
+    }
+}
+
+.enhanced-problems-widget-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    user-select: none;
+
+    th {
+        color: #737373;
+
+        vertical-align: bottom;
+        text-align: left;
+
+        white-space: nowrap;
+        overflow: hidden;
+
+        border-bottom-width: 2px;
+        border-bottom-color: #404040;
+        border-bottom-style: solid;
+
+        padding: 6px 5px;
+    }
+
+    &[data-acknowledge-problem-style="color"] {
+        tr {
+            --hover-acknowledged-lightness: 15%;
+            --hover-acknowledged-color-ratio: 85%;
+
+            &[data-severity="0"][data-acknowledged="true"] {
+                background-color: unset;
+                color: var(--severity-color-na-bg);
+            }
+
+            &[data-severity="1"][data-acknowledged="true"] {
+                background-color: unset;
+                color: var(--severity-color-info-bg);
+            }
+
+            &[data-severity="2"][data-acknowledged="true"] {
+                background-color: unset;
+                color: var(--severity-color-warning-bg);
+            }
+
+            &[data-severity="3"][data-acknowledged="true"] {
+                background-color: unset;
+                color: var(--severity-color-average-bg);
+            }
+
+            &[data-severity="4"][data-acknowledged="true"] {
+                background-color: unset;
+                color: var(--severity-color-high-bg);
+            }
+
+            &[data-severity="5"][data-acknowledged="true"] {
+                background-color: unset;
+                color: var(--severity-color-disaster-bg);
+            }
+
+            &[data-severity="0"][data-acknowledged="true"]:hover
+            {
+                background-color: unset;
+                color: color-mix(in srgb, var(--severity-color-na-bg) var(--hover-acknowledged-color-ratio), white var(--hover-acknowledged-lightness));
+            }
+
+            &[data-severity="1"][data-acknowledged="true"]:hover
+            {
+                background-color: unset;
+                color: color-mix(in srgb, var(--severity-color-info-bg) var(--hover-acknowledged-color-ratio), white var(--hover-acknowledged-lightness));
+            }
+
+            &[data-severity="2"][data-acknowledged="true"]:hover
+            {
+                background-color: unset;
+                color: color-mix(in srgb, var(--severity-color-warning-bg) var(--hover-acknowledged-color-ratio), white var(--hover-acknowledged-lightness));
+            }
+
+            &[data-severity="3"][data-acknowledged="true"]:hover
+            {
+                background-color: unset;
+                color: color-mix(in srgb, var(--severity-color-average-bg) var(--hover-acknowledged-color-ratio), white var(--hover-acknowledged-lightness));
+            }
+
+            &[data-severity="4"][data-acknowledged="true"]:hover
+            {
+                background-color: unset;
+                color: color-mix(in srgb, var(--severity-color-high-bg) var(--hover-acknowledged-color-ratio), white var(--hover-acknowledged-lightness));
+            }
+
+            &[data-severity="5"][data-acknowledged="true"]:hover
+            {
+                background-color: unset;
+                color: color-mix(in srgb, var(--severity-color-disaster-bg) var(--hover-acknowledged-color-ratio), white var(--hover-acknowledged-lightness));
+            }
+        }
+    }
+
+    &[data-acknowledge-problem-style="monochromatic"] {
+        tr {
+            --acknowledged-background: gainsboro;
+            --acknowledged-color: black;
+            
+            --hover-acknowledged-background: silver;
+
+            &[data-severity="0"][data-acknowledged="true"] {
+                background-color: var(--acknowledged-background);
+                color: var(--acknowledged-color);
+            }
+
+            &[data-severity="1"][data-acknowledged="true"] {
+                background-color: var(--acknowledged-background);
+                color: var(--acknowledged-color);
+            }
+
+            &[data-severity="2"][data-acknowledged="true"] {
+                background-color: var(--acknowledged-background);
+                color: var(--acknowledged-color);
+            }
+
+            &[data-severity="3"][data-acknowledged="true"] {
+                background-color: var(--acknowledged-background);
+                color: var(--acknowledged-color);
+            }
+
+            &[data-severity="4"][data-acknowledged="true"] {
+                background-color: var(--acknowledged-background);
+                color: var(--acknowledged-color);
+            }
+
+            &[data-severity="5"][data-acknowledged="true"] {
+                background-color: var(--acknowledged-background);
+                color: var(--acknowledged-color);
+            }
+
+            &[data-severity="0"][data-acknowledged="true"]:hover
+            {
+                background-color: var(--acknowledged-background);
+                color: var(--acknowledged-color);
+            }
+
+            &[data-severity="0"][data-acknowledged="true"]:hover
+            {
+                background-color: var(--hover-acknowledged-background);
+            }
+
+            &[data-severity="1"][data-acknowledged="true"]:hover
+            {
+                background-color: var(--hover-acknowledged-background);
+            }
+
+            &[data-severity="2"][data-acknowledged="true"]:hover
+            {
+                background-color: var(--hover-acknowledged-background);
+            }
+
+            &[data-severity="3"][data-acknowledged="true"]:hover
+            {
+                background-color: var(--hover-acknowledged-background);
+            }
+
+            &[data-severity="4"][data-acknowledged="true"]:hover
+            {
+                background-color: var(--hover-acknowledged-background);
+            }
+
+            &[data-severity="5"][data-acknowledged="true"]:hover
+            {
+                background-color: var(--hover-acknowledged-background);
+            }
+        }
+    }
+
+    tr {
+        --hover-darkness: 15%;
+        --hover-color-ratio: 85%;
+
+        --selected-background-color: gray;
+
+        &[data-severity="0"] {
+            background-color: var(--severity-color-na-bg);
+        }
+
+        &[data-severity="1"] {
+            background-color: var(--severity-color-info-bg);
+        }
+
+        &[data-severity="2"] {
+            background-color: var(--severity-color-warning-bg);
+        }
+
+        &[data-severity="3"] {
+            background-color: var(--severity-color-average-bg);
+        }
+
+        &[data-severity="4"] {
+            background-color: var(--severity-color-high-bg);
+        }
+
+        &[data-severity="5"] {
+            background-color: var(--severity-color-disaster-bg);
+        }
+
+        &[data-severity="0"]:hover {
+            background-color: color-mix(in srgb, var(--severity-color-na-bg) var(--hover-color-ratio), black var(--hover-darkness));
+        }
+
+        &[data-severity="1"]:hover {
+            background-color: color-mix(in srgb, var(--severity-color-info-bg) var(--hover-color-ratio), black var(--hover-darkness));
+        }
+
+        &[data-severity="2"]:hover {
+            background-color: color-mix(in srgb, var(--severity-color-warning-bg) var(--hover-color-ratio), black var(--hover-darkness));
+        }
+
+        &[data-severity="3"]:hover {
+            background-color: color-mix(in srgb, var(--severity-color-average-bg) var(--hover-color-ratio), black var(--hover-darkness));
+        }
+
+        &[data-severity="4"]:hover {
+            background-color: color-mix(in srgb, var(--severity-color-high-bg) var(--hover-color-ratio), black var(--hover-darkness));
+        }
+
+        &[data-severity="5"]:hover {
+            background-color: color-mix(in srgb, var(--severity-color-disaster-bg) var(--hover-color-ratio), black var(--hover-darkness));
+        }
+
+        &.selected, &.pre-selected {
+            background-color: var(--selected-background-color) !important;
+        }
+
+        &[data-severity="0"].selected,
+        &[data-severity="0"].pre-selected {
+            color: var(--severity-color-na-bg);
+        }
+
+        &[data-severity="1"].selected,
+        &[data-severity="1"].pre-selected {
+            color: var(--severity-color-info-bg);
+        }
+
+        &[data-severity="2"].selected,
+        &[data-severity="2"].pre-selected {
+            color: var(--severity-color-warning-bg);
+        }
+
+        &[data-severity="3"].selected,
+        &[data-severity="3"].pre-selected {
+            color: var(--severity-color-average-bg);
+        }
+
+        &[data-severity="4"].selected,
+        &[data-severity="4"].pre-selected {
+            color: var(--severity-color-high-bg);
+        }
+
+        &[data-severity="5"].selected,
+        &[data-severity="5"].pre-selected {
+            color: var(--severity-color-disaster-bg);
+        }
+
+        /* 
+        &.pre-selected {
+            background-color: rgba(0, 200, 0, 0.7);
+        }
+
+        &.focused {
+            box-shadow: inset 0 0 0px 2px black;
+        }
+        */
+
+        td {
+            vertical-align: middle;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            padding: 2px 5px;
+        }
+    }
+}
