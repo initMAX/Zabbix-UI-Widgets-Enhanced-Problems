@@ -1,0 +1,9 @@
+01-overview.png:
+  cs: Sledujte aktivní problémy v nastavitelné tabulce dashboardu s počty závažností, flexibilními sloupci a přímým potvrzováním.
+  en: Review active problems in a configurable dashboard table with severity counters, flexible columns and direct acknowledgement actions.
+02-problems.png:
+  cs: Devatenáct otevřených problémů na osmi hostech seřazených podle závažnosti, s počty po závažnostech v souhrnném řádku.
+  en: Nineteen open problems across eight hosts, sorted by severity, with the per-severity counters in the summary row.
+06-settings.png:
+  cs: 'Nastavení widgetu: titulní blok, filtrování, sloupce, řazení a souhrnný řádek.'
+  en: 'Widget configuration: title block, filtering, columns, sorting and the summary row.'
