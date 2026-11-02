@@ -1,0 +1,45 @@
+01-overview.png:
+  cs: PRO přehled aktivních incidentů s počty podle závažnosti, vlastními sloupci a zvýrazněním již potvrzených
+    problémů.
+  en: A PRO incident overview with severity totals, a custom column layout and distinct styling for acknowledged
+    problems.
+02-problems.png:
+  cs: Zobrazte počet kontrol z aktualizačních zpráv, službu z tagu a odkaz na ticket vedle každého problému.
+  en: Show Checks extracted from update messages, Service from a tag and linked Ticket values alongside each problem.
+03-action-buttons.png:
+  cs: Nativní kontextová nabídka problému obsahuje vestavěné akce i administrátorem nakonfigurovaná PRO tlačítka
+    pro ticket, runbook a diagnostiku.
+  en: The native problem menu combines built-in actions with administrator-configured PRO buttons for tickets, runbooks
+    and diagnostics.
+04-administration.png:
+  cs: 'Nastavení požadavku Create ticket: odeslání z Frontend server, POST, nativní Bearer autentizace, hlavičky,
+    JSON tělo a přijímané stavové kódy.'
+  en: 'Create ticket request settings: Frontend server, POST, native Bearer authentication, headers, JSON body and
+    accepted status codes.'
+05-administration-workflow-permissions.png:
+  cs: Nastavte čtení odpovědi, zprávu operátorovi, poznámku k problému a navazující tlačítko spolu s oprávněními
+    uživatelů a hostů.
+  en: Configure response extraction, the operator message, problem note and follow-up button together with user
+    and host permissions.
+06-settings.png:
+  cs: Sloupce mají součet šířek 100 %; tři úrovně řazení PRO určují pořadí podle závažnosti, služby a ticketu.
+  en: Column widths total 100%; three PRO sorting levels order problems by severity, Service and Ticket.
+07-custom-columns.png:
+  cs: Custom columns spojují původní Count, hodnotu Service z tagu a další PRO sloupec Ticket z aktualizační zprávy
+    s vlastním odkazem.
+  en: Custom columns combine the original Count, Service from a tag and an additional PRO Ticket column extracted
+    from an update message with its own link.
+08-ack-style.png:
+  cs: Zkontrolujte barvu potvrzených problémů v nativním pickeru s náhledy Light a Dark a automaticky čitelným textem.
+  en: Preview the acknowledged-problem colour in the native picker with Light and Dark samples and automatically
+    readable text.
+free-problems.png:
+  cs: Skutečná FREE tabulka zachovává původní Count z aktualizačních zpráv a vlastní Tag sloupce bez nových PRO
+    sloupců.
+  en: The actual FREE table retains the original Count from update messages and custom Tag columns without the new
+    PRO-only columns.
+free-custom-columns.png:
+  cs: Ve skutečné FREE edici zůstávají původní Count a Tag nastavení dostupná; nové Message a per-column link volby
+    mají jednotlivé PRO zámky.
+  en: In the physical FREE edition, original Count and Tag settings stay available while new Message and per-column
+    link options are individually locked for PRO.
