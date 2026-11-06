@@ -172,9 +172,9 @@ The time acknowledge dialog reflects the latest accepted suppression or unsuppre
 
 ## Install
 
-**FREE** ships as **GPG-signed `deb` / `rpm` packages** from the initMAX repository - `apt` / `dnf` installs them and keeps them updated.
+**FREE** ships as **GPG-signed `deb` / `rpm` packages** for native installations and **RSA-signed Alpine `apk` packages** for Docker frontends, from the initMAX repository. Use `apt` / `dnf` / `zypper` for native installation and updates.
 
-Running the Zabbix frontend in Docker? The same repository serves an Alpine (`apk`) package, and the **Docker** tab of the Portal installer writes the Dockerfile block for your edition.
+Running the Zabbix frontend in Docker? The **Docker** tab of the Portal installer prepares the Dockerfile block and build command for your edition. Alpine APK is the recommended method; DEB/RPM are also available for matching base images, or use a manual ZIP installation in a persistent volume. For package updates, rebuild your frontend image and recreate the container.
 
 ### Easiest way - the guided installer on the Portal
 
@@ -336,7 +336,7 @@ The capabilities of the released FREE widget stay FREE, including unlimited Tag 
 | ------------ | ------------------------------------------------------------ |
 | **Zabbix**   | 6.0 · 6.2 · 6.4 · 7.0 · 7.2 · 7.4 · 8.0 - one package covers all |
 | **PHP**      | 7.4 or newer                                                 |
-| **OS**       | Debian/Ubuntu · RHEL/Rocky/Alma/Oracle/Amazon · SUSE         |
+| **OS**       | Debian/Ubuntu · RHEL/Rocky/Alma/Oracle/Amazon · SUSE; Alpine APK for Docker frontends |
 | **Editions** | FREE (AGPLv3) and PRO (one-time commercial licence)            |
 | **Localisation** | All 27 Zabbix display locales - the widget follows each user's own language setting |
 | **High availability** | Ready. No server-side component and no local state; install it on every frontend node of an HA cluster and any node can serve it |
